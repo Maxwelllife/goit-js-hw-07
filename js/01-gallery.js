@@ -1,8 +1,6 @@
 import { galleryItems } from "./gallery-items.js";
 // Change code below this line
 
-// console.log(galleryItems);
-
 const refs = {
   gallery: document.querySelector(".gallery"),
 };
@@ -10,31 +8,48 @@ const refs = {
 refs.gallery.addEventListener("click", onGallaryClick);
 
 const markupArr = galleryItems
-  .map(({ preview, description }) => {
-    return `<li class="gallery-item">
-  <a href="#" class = "gallery__link">
-    <img class ="gallery__image" src="${preview}" alt="${description}">
+  .map(({ preview, original, description }) => {
+    return `<div class="gallery-item">
+  <a href="${original}" class = "gallery__link">
+    <img class ="gallery__image" data-source = '${original}' src="${preview}" alt="${description}">
   </a>
-</li>`;
+</div>`;
   })
   .join("");
 
 refs.gallery.insertAdjacentHTML("beforeend", markupArr);
 
+const instance = basicLightbox.create(`<img src=''/>`, {
+  onShow: () =>
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        instance.close();
+      }
+    }),
+  onClose: () => window.removeEventListener("keydown", () => {}),
+});
+
 function onGallaryClick(event) {
-  //   console.log(event.target.classList.contains(".gallery-item"));
-  const isImageLink = event.target.classList.contains(".gallery-item");
-  if (!isImageLink) {
+  event.preventDefault();
+  if (event.target.nodeName !== "IMG") {
     return;
   }
-  console.log(event.target);
+  instance.element().querySelector("img").src = event.target.dataset.source;
+  instance.show();
 }
 
-// 1. написати функцію яка отримує доступ до значення властивості original в об'єкті.
-// 2.
+// function callback(event) {
+//     if (event.key === 'Escape') {
+//         instance.close();
+//     }
+// }
+// instance це глобальна змінна
+// при кліку на зображення ми звертаємось до instance та міняємо йому src на той дата атрибут що отримали через event
+// так через event ми можемо дізнатись дата-атрибут елементу по якому клікнули
+// instance.element.querySelector('img').src =
+
 //
-//
-// -----------------через map + .createElement работает но не закончил----------------
+// -----------------создание разметки через map + .createElement----------------
 // const list = galleryItems.map(({ preview, original, description }) => {
 //   const blocks = document.createElement("div");
 //   const link = document.createElement("a");
@@ -50,17 +65,4 @@ function onGallaryClick(event) {
 // });
 // console.log(list);
 // refs.gallery.append(...list);
-// console.log(refs.gallery);
-
-// -----------------через forEach не доделал----------------
-// const blocks = [];
-// galleryItems.forEach(() => {
-//   const block = document.createElement("div");
-//   //   console.log(block);
-//   block.style.width = "auto";
-
-//   blocks.push(block);
-//   // console.log(blocks);
-// });
-// refs.gallery.append(...blocks);
 // console.log(refs.gallery);
