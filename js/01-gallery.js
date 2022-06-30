@@ -7,7 +7,7 @@ const refs = {
 
 refs.gallery.addEventListener("click", onGallaryClick);
 
-const markupArr = galleryItems
+const markup = galleryItems
   .map(({ preview, original, description }) => {
     return `<div class="gallery-item">
   <a href="${original}" class = "gallery__link">
@@ -17,7 +17,7 @@ const markupArr = galleryItems
   })
   .join("");
 
-refs.gallery.insertAdjacentHTML("beforeend", markupArr);
+refs.gallery.insertAdjacentHTML("beforeend", markup);
 
 const instance = basicLightbox.create(`<img src=''/>`, {
   onShow: () =>
