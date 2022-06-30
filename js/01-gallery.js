@@ -20,13 +20,8 @@ const markup = galleryItems
 refs.gallery.insertAdjacentHTML("beforeend", markup);
 
 const instance = basicLightbox.create(`<img src=''/>`, {
-  onShow: () =>
-    window.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        instance.close();
-      }
-    }),
-  onClose: () => window.removeEventListener("keydown", () => {}),
+  onShow: () => window.addEventListener("keydown", onEscapePress),
+  onClose: () => window.removeEventListener("keydown", onEscapePress),
 });
 
 function onGallaryClick(event) {
@@ -38,11 +33,12 @@ function onGallaryClick(event) {
   instance.show();
 }
 
-// function callback(event) {
-//     if (event.key === 'Escape') {
-//         instance.close();
-//     }
-// }
+function onEscapePress(event) {
+  if (event.key === "Escape") {
+    instance.close();
+  }
+}
+
 // instance це глобальна змінна
 // при кліку на зображення ми звертаємось до instance та міняємо йому src на той дата атрибут що отримали через event
 // так через event ми можемо дізнатись дата-атрибут елементу по якому клікнули
